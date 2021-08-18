@@ -1,0 +1,119 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $proxyFilePath: '/application/proxies.txt'
+            $proxyCheckUrl: '%env(PROXY_CHECK_URL)%'
+            $parsers: !tagged_iterator app.parser
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Form/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments']
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    _instanceof:
+        App\Service\AbstractParser:
+            tags: ['app.parser']
+
+    App\Menu\MenuBuilder:
+        bind:
+            $factory: "@knp_menu.factory"
+        tags:
+            - { name: knp_menu.menu_builder, method: createLeftMenu, alias: left }
+            - { name: knp_menu.menu_builder, method: createRightMenu, alias: right }
+
+    App\EventListener\PublisherListener:
+        tags:
+            - name: 'doctrine.orm.entity_listener'
+              event: 'preRemove'
+              entity: App\Entity\Publisher
+
+    App\EventListener\PositionResponseListener:
+        tags:
+            - { name: 'position.response.listener', event: 'position.response', method: 'onPositionResponse' }
+
+    App\Admin\PublisherAdmin:
+        arguments: [~, App\Entity\Publisher, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: "Publishers", group: "Main" }
+
+    App\MessageHandler\PublisherErrorHandler:
+        bind:
+            $emailFrom: "notification.development@mail.org"
+            $emailsTo:
+                - "dev.development@mail.org"
+
+    App\MessageHandler\AppStorePublisherErrorHandler:
+        bind:
+            $emailFrom: "notification.development@mail.org"
+            $emailsTo:
+                - "dev.development@mail.org"
+
+    App\MessageHandler\PublisherDeleteHandler:
+        bind:
+            $emailFrom: "notification.development@mail.org"
+            $emailsTo:
+                - "dev.development@mail.org"
+
+    App\MessageHandler\AppStorePublisherDeleteHandler:
+        bind:
+            $emailFrom: "notification.development@mail.org"
+            $emailsTo:
+                - "dev.development@mail.org"
+
+
+    App\MessageHandler\ApplicationDeleteHandler:
+        bind:
+            $emailFrom: "notification.development@mail.org"
+            $emailsTo:
+                - "dev.development@mail.org"
+
+
+    App\MessageHandler\AppStoreApplicationDeleteHandler:
+        bind:
+            $emailFrom: "notification.development@mail.org"
+            $emailsTo:
+                - "dev.development@mail.org"
+
+    App\MessageHandler\ApplicationUpdateHandler:
+        bind:
+            $emailFrom: "notification.development@mail.org"
+            $emailsTo:
+                - "dev.development@mail.org"
+
+
+    App\MessageHandler\AppStoreApplicationUpdateHandler:
+        bind:
+            $emailFrom: "notification.development@mail.org"
+            $emailsTo:
+                - "dev.development@mail.org"
+
+
+    Nelexa\GPlay\GPlayApps:
+        calls:
+            - setConcurrency: [ 1 ]
+            - setTimeout: [ 7 ]

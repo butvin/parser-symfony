@@ -1,0 +1,20 @@
+version: "2"
+
+services:
+    async_main_consumer:
+        build: cli
+        working_dir: /application
+        volumes:
+            - ../..:/application
+            - /var/log/application:/application/var/log
+        command: php -d memory_limit=8000M bin/console messenger:consume async_main_transport --limit=10 -vvv
+        restart: always
+
+    async_position_consumer:
+        build: cli
+        working_dir: /application
+        volumes:
+            - ../..:/application
+            - /var/log/application:/application/var/log
+        command: php -d memory_limit=8000M bin/console messenger:consume async_position_transport --limit=10 -vvv
+        restart: always

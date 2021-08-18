@@ -1,0 +1,28 @@
+version: "2"
+
+services:
+    database:
+        image: mariadb:10.4
+        container_name: database
+        working_dir: /application
+        volumes:
+            - ../.db:/var/lib/mysql
+        env_file:
+            - ../../.env
+        ports:
+            - "3315:3306"
+
+    rabbitmq:
+        image: "rabbitmq:3-management"
+        container_name: rabbitmq
+        env_file:
+            - ../../.env
+        ports:
+            - "15672:15672"
+            - "5672:5672"
+
+    redis:
+        image: bitnami/redis
+        container_name: redis
+        env_file:
+            - ../../.env

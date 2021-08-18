@@ -1,0 +1,120 @@
+
+{% block formDatepickerDate %}
+<section class="mt-4">
+    {% set icon = ('<i class="far fa-calendar-alt"></i>') %}
+    {% set i = icon|striptags('<i>') %}
+    <div class="form-wrapper">
+        {{ form_start(form, {
+            'id': 'form-datepicker',
+            'action': path('position_show', {'id': application.id}),
+            'method': 'POST',
+            'multipart': true
+        }) }}
+
+        {% if form_errors(form)|length > 0 %}
+            {{ form_errors(form) }}
+        {% endif %}
+
+        <div class="form-group">
+            {% if form.dateInput is defined %}
+                {{ form_row(form.dateInput, {
+                    'id': 'input-datepicker-date',
+                    'required': true,
+                    'disabled': false,
+                    'html5': false,
+                    'attr': {
+                        'class': 'form-control-sm shadow-sm input-datepicker-date'
+                    },
+                    'label': 'Date',
+                    'label_attr': {
+                        'class': 'date-ago',
+                        'for': 'input-datepicker-date'
+                    },
+                    'widget': 'single_text',
+                    'input': 'string',
+                    'format': 'yyyy-MM-dd',
+                    'input_format': 'string'
+                }) }}
+            {% endif %}
+        </div>
+
+        {{ form_row(form.search, {
+            'id': 'submit-datepicker-btn',
+            'attr': { 'class': 'btn btn-sm btn-primary d-none'} })
+        }}
+
+        {{ form_end(form) }}
+    </div>
+</section>
+<script>
+    $(document).ready(function () {
+        const form = $('#form-datepicker')
+        const dateField = $('#input-datepicker-date')
+        const submitBtn = $('#submit-datepicker-btn')
+        const url = '{{ path('position_show', {'id': application.id}) }}';
+        const dateNow = '{{'now'|date('Y-m-d') }}'
+        console.log(dateNow)
+
+        const targetDate = new DateTime(dateField, {
+            format: 'YYYY-MM-DD',
+            buttons: {
+                today: true,
+                clear: true
+            }
+        })
+
+        dateField.on('change', function (event) {
+            submitBtn.trigger('click')
+            // return ( async () => await sendPostRequest() )()
+        });
+
+        function sendPostRequest() {
+            $.post({
+                url: url,
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: dateField.val().json,
+                async: false,
+                success: function ( response ) {
+                    if (response.status === 200 ) {
+                        console.log('SUCCESS')
+                        console.log( response )
+
+                        return response.json
+                    } else {
+                        console.log('SOME-ELSE-SUCCESS')
+                        console.log( response )
+                    }
+                },
+                error: function ( xhr, opt, err ) {
+                    console.log('ERROR')
+                    console.log(xhr.status, xhr, opt, err)
+                },
+                complete: function (data) {
+                    if (data.status === 200) {
+                        console.log('COMPLETE - GOOD')
+                        console.log(data)
+
+                        return data.response
+                    }
+                }
+            })
+        }
+    });
+</script>
+<style>
+    .input-datepicker-date {
+        margin: 0;
+        padding: .25rem .5rem;
+        width: 9rem;
+        line-height: 1.5rem !important;
+        height: 1.77rem !important;
+        color: #011638 !important;
+        border-radius: 0 !important;
+    }
+    .invalid-feedback .d-block {
+        margin: 4px 0;
+    }
+</style>
+{% endblock %}

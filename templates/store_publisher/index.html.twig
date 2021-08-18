@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Store publishers list{% endblock %}
+
+{% block body %}
+
+    {{ include('store_publisher/_form.html.twig') }}
+
+    <hr>
+
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+            {% for publisher in publishers %}
+                {{ include('store_publisher/_view.html.twig') }}
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    $(function () {
+        $('input.ip-address').mask('0ZZ.0ZZ.0ZZ.0ZZ', { translation: { 'Z': { pattern: /[0-9]/, optional: true } } });
+
+        $('[data-toggle="popover"]').popover();
+        $('.popover-dismiss').popover({trigger: 'focus'});
+
+        $('[data-toggle="tooltip"]').tooltip({ boundary: 'window' });
+
+        $('body').on('click', '.modal-edit', function(){
+            $('#editModal .modal-body').html('Loading...').load($(this).data("remote"), function () {
+                $('#editModal input.ip-address').mask('0ZZ.0ZZ.0ZZ.0ZZ', { translation: { 'Z': { pattern: /[0-9]/, optional: true } } });
+            });
+            $('#editModal').modal();
+        });
+    });
+</script>
+
+{% endblock %}

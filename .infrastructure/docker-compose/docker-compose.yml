@@ -1,0 +1,28 @@
+version: "2"
+
+services:
+    nginx:
+        build:
+            context: .
+            dockerfile: ./nginx/Dockerfile
+        container_name: nginx
+        working_dir: /application
+        volumes_from:
+            - php_fpm
+
+    php_fpm:
+        build: php-fpm
+        container_name: php-fpm
+        working_dir: /application
+        environment:
+            - DATABASE_TIMEZONE=UTC
+
+    proxy_scraper:
+        build: proxy-scraper
+        container_name: proxy-scraper
+        working_dir: /application
+        command: python /proxy-scraper/main.py
+        environment:
+            - SAVE_PATH=/application/proxies.txt
+        volumes_from:
+            - php_fpm

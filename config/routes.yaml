@@ -1,0 +1,52 @@
+sonata_user_admin_security:
+  resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
+  prefix: /admin
+
+sonata_user_admin_resetting:
+  resource: '@SonataUserBundle/Resources/config/routing/admin_resetting.xml'
+  prefix: /admin/resetting
+
+fos_user:
+  resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+#store_position_test:
+#    path: /store/rating/{type}/{date}/{id}
+#    controller: App\Controller\AppStorePositionController::rating
+
+#store_position_index:
+#  path: /store/position/{id}
+#  controller: App\Controller\AppStorePositionController::index
+
+#store_publisher_edit:
+#  path: /store/{id}
+#  controller: App\Controller\AppStorePublisherController::edit
+
+#store_publisher_index:
+#  path: /store/
+#  controller: App\Controller\AppStorePublisherController::index
+
+#todo: regex validation to is param
+publisher_edit:
+  path: /{id}
+  controller: App\Controller\PublisherController::edit
+
+publisher_index:
+  path: /
+  controller: App\Controller\PublisherController::index
+
+
+#todo: regex validation to is param
+position_show:
+  path: /position/{id}
+  controller: App\Controller\PositionController::show
+
+#todo: regex validation to is param
+position_index_json:
+  path: /api/position/{id}
+  controller: App\Controller\PositionController::show
+
+
+
+
+
+

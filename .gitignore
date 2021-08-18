@@ -1,0 +1,26 @@
+/venv/
+__pycache__/
+*.py[cod]
+
+.DS_Store
+.idea
+proxies.txt
+/.infrastructure/.db
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/.env.prod
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/public/icons/*
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###

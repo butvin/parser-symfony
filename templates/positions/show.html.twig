@@ -1,0 +1,209 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ application.name }}
+{% endblock %}
+
+{% block body %}
+    <style>
+        .container-positions {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size:  1rem;
+            line-height: 1;
+            font-weight: 400 !important;
+            padding: 0;
+            margin: 0;
+        }
+        .monospace {
+            font-family: Lucida Console, Courier, monospace;
+        }
+        .sans-serif {
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+        }
+        table#positions-dashboard {
+        }
+        .text-index-number-danger,
+        .text-index-number-total,
+        .text-index-number-success,
+        .text-index-number-equals {
+            font-size:  1rem;
+            line-height: 1rem;
+        }
+        .text-index-number-normal {
+            font-size:  1.15rem;
+            font-weight: 400;
+        }
+        .text-index-number-danger {
+            color: rgba(255, 99, 71, 0.95);
+        }
+        .text-index-number-equals {
+            color: rgba(1, 22, 56, 0.98);
+        }
+        .text-index-number-success {
+            color: #28a745;
+        }
+        .text-index-number-total {
+            color: #0d6aad;
+        }
+        .flag {
+            font-size: 1.47rem;
+        }
+        .text-country-name {
+        }
+        .flag, .text-country-name {
+            font-weight: 400;
+        }
+        .date-ago {
+            font-weight: 200;
+            color: #3b83d9;
+        }
+        thead, th {
+            border-top: 0 !important;
+            background: #ffffff !important;
+            height: 77px !important;
+            color: #011638 !important;
+        }
+        tr:first-child {
+            border-top: 0 !important;
+        }
+        .group-country:hover {
+            background-color: rgba(255, 255, 51, 0.14) !important;
+        }
+        .num {
+            width: 24px!important;
+        }
+        .nav-link {
+            padding: .95rem .05rem;
+        }
+        .rating-tab-title {
+            margin: 1.25rem .1rem .5rem .1rem;
+            font-size:  1.15rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+    </style>
+    <main class="container-fluid container-positions">
+
+        {% set up = '<i class="fas fa-caret-up text-index-number-success"></i>' %}
+        {% set down = '<i class="fas fa-caret-down text-index-number-danger"></i>' %}
+        {% set equal = '<i class="fas fa-equals text-dark"></i>' %}
+        {% set rating_types = constant('App\\Entity\\Position::RATING_TYPES') %}
+        {% set category = application.category.name %}
+        {% set totalAmount = positions|length %}
+        {% set no_index = 'отсуст.' %}
+
+        <section class="row">
+            <div class="col-6">
+                <p class="h2 mt-2">
+                    <a class="link" href="{{ application.url }}" title="{{ application.name }}">
+                        <span class="title sans-serif">{{ application.name }}</span>
+                    </a>
+                </p>
+                <p class="h4 mt-2">
+                    <span class="badge badge-light sans-serif">{{ category|upper }}</span>
+                </p>
+                <p class="h4 mt-2">
+                    <span class="text-index-number-normal">Records in all ratings: </span>
+                    <span class="badge badge-light sans-serif">{{ totalAmount }}</span>
+                </p>
+            </div>
+            <div class="col-6">
+                {% include 'positions/_form.html.twig' %}
+            </div>
+        </section>
+        <!-- TAB PANEL TITLES -->
+        <section class="mt-2">
+            <nav class="justify-content-start">
+                <div class="nav nav-tabs sans-serif" id="nav-tab" role="tablist">
+                    {% if rating_types %}
+                        {% for rating_key, rating_tab_title in rating_types %}
+                            <a
+                                id="nav-{{ loop.index }}-tab"
+                                class="nav-link"
+                                data-toggle="tab"
+                                href="#nav-tab-{{ loop.index }}"
+                                role="tab"
+                                aria-controls="nav-control-{{ loop.index }}"
+                                aria-selected="true"
+                            >
+                                <span class="h5 m-2 p-2">{{ rating_tab_title }}</span>
+                            </a>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </nav>
+        </section>
+        <!-- TAB CONTENT -->
+        <section class="tab-content" id="nav-tabContent">
+            {% if rating_types %}
+                {% for rating_key, rating_title in rating_types %}
+                    <div
+                        id="nav-tab-{{ loop.index }}"
+                        class="tab-pane fade"
+                        role="tabpanel"
+                        aria-labelledby="nav-control-{{ loop.index }}"
+                    >
+                        <h5 class="rating-tab-title">{{ rating_title }}</h5>
+                        <section class="table-responsive">
+                            <!-- TABLE-{{ loop.index }} -->
+                            <table id="#positions-dashboard-{{ loop.index }}" class="table table-sm table-hover">
+                                <caption>
+                                    <small class="text-muted">records: <i class="badge badge-light">{{ positions|length }}</i></small>
+                                </caption>
+                                <thead class="thead-light">
+                                    <tr class="border-top-0">
+                                        <th scope="col" class="align-bottom text-center num m-0 p-0"><i class="fas fa-list-ol"></i></th>
+                                        <th scope="col" class="align-middle">{{ 'country/region'|upper }}</th>
+                                        <th scope="col" class="align-middle">{{ rating_title|upper}}</th>
+                                        <th scope="col" class="align-middle">{{ 'apps'|upper }}</th>
+                                        <th scope="col" class="align-middle">{{ 'date'|upper }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="align-middle">
+                                    {% for position in positions|filter(position => position.ratingType == rating_key)|sort() %}
+                                        <tr class="border-0">
+                                            <td class="align-middle text-left">
+                                                <small class="badge badge-light badge-pill text-muted">{{ loop.index }}</small>
+                                            </td>
+                                            <td class="align-middle group-country">
+                                                <span class="flag">{{ get_country_flag(position.country) }}</span>
+                                                <span class="text-country-name">{{ get_country_name(position.country) }}</span>
+                                            </td>
+                                            <td class="align-middle group-statistic">
+                                                <div class="inline">
+                                                    {% if position.index == -1 %}
+                                                        <span class="text-index-number-equals">{{ no_index }}</span>
+                                                    {% else %}
+                                                        <span class="text-index-number-normal">{{ position.index }}</span>
+                                                    {% endif %}
+                                                    {% if (position.index - position.prevIndex) > 0 %}
+                                                        <span class="text-index-number-success">{{ up|raw }}&nbsp;{{ position.index - position.prevIndex }}</span>
+                                                    {% elseif (position.index - position.prevIndex) < 0 %}
+                                                        <span class="text-index-number-danger">{{ down|raw }}&nbsp;{{ (position.index - position.prevIndex)|abs }}</span>
+                                                    {% else %}
+                                                        <span class="text-index-number-equals">{{ '=' }}&nbsp;{{ position.index - position.prevIndex }}</span>
+                                                    {% endif %}
+                                                </div>
+                                            </td>
+                                            <td class="align-middle">{{ position.totalQuantity }}</td>
+                                            <td class="align-middle date-ago">{{ position.createdAt|date('d M Y') }}&nbsp;|&nbsp;<small class="date-ago">{{ position.createdAt|ago }}</small></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </section>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </section>
+    </main>
+    <script>
+        $(document).ready(function () {
+            const tabContentFirst = $('#nav-tab-1')
+            const tabTitleFirst = $('#nav-1-tab')
+
+            tabContentFirst.addClass('show active')
+            tabTitleFirst.addClass('active')
+        })
+    </script>
+{% endblock %}

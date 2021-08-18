@@ -1,0 +1,17 @@
+version: "2"
+
+services:
+    nginx:
+      ports:
+        - "80:80"
+      build:
+        args:
+          env: dev
+
+    php_fpm:
+      build:
+        args:
+          env: dev
+      volumes:
+         - ~/.composer/docker-cache/:/root/.composer:cached
+         - ../../:/application

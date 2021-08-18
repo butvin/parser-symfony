@@ -1,0 +1,126 @@
+<div id="accordion">
+    {% set state = '' %}
+    {% set time = 'Updated ' ~  publisher.updatedAt|ago %}
+    {% set newApplications = publisher.newApplications|length %}
+    {% set bannedApplications = publisher.bannedApplications|length %}
+
+    {% set question = '<i class="fas fa-exclamation-triangle"></i>' %}
+    {% set clock = '<i class="far fa-clock"></i>' %}
+    {% set scheduled = '<i class="fas fa-history"></i>' %}
+    {% set linkIcon = '<i class="fa fa-external-link-alt"></i>' %}
+
+    {% set icon = '<i class="fas fa-globe"></i>' %}
+
+    {% set icon = '<i class="fab fa-app-store"></i>' %}
+
+    {% set title = icon ~ ' ' ~ publisher.name  %}
+
+    {% if newApplications %}
+        {% set title = title ~ ' <span class="badge badge-pill badge-success">+' ~ newApplications ~ '</span>' %}
+    {% endif %}
+
+    {% if bannedApplications %}
+        {% set title = title ~ ' <span class="badge badge-pill badge-danger">-' ~ bannedApplications ~ '</span>' %}
+    {% endif %}
+
+    {% if publisher.deletedAt is not null %}
+        {% set state = 'alert-danger' %}
+        {% set time = 'Deleted ' ~  publisher.deletedAt|ago %}
+        {% set time = publisher.name is null ? 'Store publisher not found' : 'Deleted ' ~  publisher.deletedAt|ago %}
+        {% set title = publisher.name is null ? '#' ~ publisher.id ~ ' ' ~ publisher.url : title %}
+    {% elseif publisher.name is null %}
+        {% set state = 'alert-warning text-muted' %}
+        {% set time = 'Waiting for synchronization' %}
+        {% set title = '#' ~ publisher.id ~ ' ' ~ publisher.externalId %}
+    {% elseif (publisher.createdAt|date('Y-m-d') == "now"|date('Y-m-d')) %}
+        {% set state = 'alert-success' %}
+    {% endif %}
+
+    {% set description = '<b>ID</b>: ' ~ publisher.id  %}
+
+    {% if publisher.number %}
+        {% set description = description ~ '<br/><b>Dedicated number</b>: ' ~ publisher.number %}
+    {% endif %}
+
+    <div class="card">
+        <a class="btn flex-column align-items-start" data-toggle="collapse" data-target="#collapse{{ publisher.id }}" aria-expanded="true" aria-controls="collapse{{ publisher.id }}">
+            <div class="card-header d-flex w-100 justify-content-between {{ state }}" id="heading{{ publisher.id }}">
+                <div>
+                    {% if publisher.number %}
+                        <h5 class="mb-0" style="display: inline-block;"><span class="badge badge-info modal-edit" data-remote="{{ url('store_publisher_edit', {id: publisher.id}) }}">{{ publisher.number }}</span></h5>
+                    {% endif %}
+                    <h5 class="mb-0" onclick="window.open('{{ publisher.url }}', '_blank');" style="display: inline-block;">
+                        {{ title | raw }}
+                    </h5>
+                    <span class="text-secondary">({{ publisher.storeApplications|length }})</span>
+                    {% if publisher.address %}
+                        <h5 class="mb-0" style="display: inline-block;">
+                            <span class="badge badge-primary modal-edit" data-remote="{{ url('store_publisher_edit', {id: publisher.id}) }}">{{ publisher.address }}</span>
+                        </h5>
+                    {% endif %}
+                    <h5 class="mb-0" style="display: inline-block;">
+                        <i class="fas fa-info modal-edit" data-toggle="tooltip" data-placement="top" data-html="true" title="{{ description|e('html') }}" data-remote="{{ url('store_publisher_edit', {id: publisher.id}) }}" style="margin-left: 5px"></i>
+                    </h5>
+                </div>
+
+                <small>
+                    {{ time }}
+                    {% if publisher.reason  %}
+                        <i class="far fa-question-circle" tabindex="0" data-toggle="popover"  data-trigger="focus" title="Reason" data-content="{{ publisher.reason }}"></i>
+                    {% endif %}
+                </small>
+            </div>
+        </a>
+        {% if publisher.storeApplications|length %}
+            <div id="collapse{{ publisher.id }}" class="collapse show" aria-labelledby="heading{{ publisher.id }}" data-parent="#accordion">
+                <div class="card-body">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                        <tr>
+                            <th>Icon</th>
+                            <th>Name</th>
+                            <th class="text-center">Version</th>
+                            <th class="text-center">Purchases</th>
+                            <th>Created&nbsp;At</th>
+                            <th>Deleted&nbsp;At</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for application in app_store_get_sorted_publisher_apps(publisher) %}
+                            {% if application.deletedAt %}
+                                <tr class="table-danger align-middle">
+                            {% elseif application.createdAt > date()|date_modify("-1 day") %}
+                                <tr class="table-success align-middle">
+                            {% else %}
+                                <tr class="align-middle">
+                            {% endif %}
+                            <td><img class="img-thumbnail w-25" src="{{ asset('storeIcons/' ~ application.icon) }}" alt="{{ application.name }}"/></td>
+                            <td>{{ application.name }}</td>
+                            <td class="align-middle text-center {% if application.isUpdated  %}table-warning{% endif %}">
+                                {{ application.version }}
+                            </td>
+                            <td class="align-middle text-center">
+                                {% if application.purchases %}
+                                    <i class="fas fa-money-check-alt"></i>
+                                {% endif %}
+                            </td>
+                            <td>{{ application.createdAt|date('Y-m-d H:i:s') }}</td>
+                            <td>{{ application.deletedAt ? application.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+                            <td>
+                                {% if application.reason %}
+                                    <a tabindex="0" class="btn btn-danger" role="button" data-toggle="popover" data-trigger="focus" title="Reason" data-content="{{ application.reason }}"><i class="far fa-question-circle"></i></a>
+                                {% endif %}
+
+                                <a class="btn btn-info shadow-sm" role="button" tabindex="-1" href="/store/rating/{{ ratingType }}/{{ "now"|date("Y-m-d") }}/{{ application.id }}" target="_blank"><i class="fas fa-list-ol"></i></a>
+                                <a href="{{ application.url }}" target="_blank" class="btn btn-primary"><i class="fa fa-external-link-alt"></i></a>
+                            </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
