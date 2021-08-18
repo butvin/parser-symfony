@@ -67,19 +67,7 @@ services:
             $emailsTo:
                 - "dev.development@mail.org"
 
-    App\MessageHandler\AppStorePublisherErrorHandler:
-        bind:
-            $emailFrom: "notification.development@mail.org"
-            $emailsTo:
-                - "dev.development@mail.org"
-
     App\MessageHandler\PublisherDeleteHandler:
-        bind:
-            $emailFrom: "notification.development@mail.org"
-            $emailsTo:
-                - "dev.development@mail.org"
-
-    App\MessageHandler\AppStorePublisherDeleteHandler:
         bind:
             $emailFrom: "notification.development@mail.org"
             $emailsTo:
@@ -92,21 +80,7 @@ services:
             $emailsTo:
                 - "dev.development@mail.org"
 
-
-    App\MessageHandler\AppStoreApplicationDeleteHandler:
-        bind:
-            $emailFrom: "notification.development@mail.org"
-            $emailsTo:
-                - "dev.development@mail.org"
-
     App\MessageHandler\ApplicationUpdateHandler:
-        bind:
-            $emailFrom: "notification.development@mail.org"
-            $emailsTo:
-                - "dev.development@mail.org"
-
-
-    App\MessageHandler\AppStoreApplicationUpdateHandler:
         bind:
             $emailFrom: "notification.development@mail.org"
             $emailsTo:

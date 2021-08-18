@@ -14,7 +14,7 @@ proxies.txt
 /.env.prod
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
-/public/icons/*
+/public/icons/
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
