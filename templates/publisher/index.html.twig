@@ -4,46 +4,64 @@
 
 {% block body %}
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                {{ include('publisher/_form.html.twig') }}
-            </div>
+        <div class="row mt-2">
+            {{ include('publisher/_form.html.twig') }}
         </div>
-        <div class="row">
+        <div class="row mt-2">
             <div class="col-12">
                 <ul class="nav nav-pills nav-fill" id="publisher-type-tab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <a
-                                class="nav-link active"
-                                id="all-tab"
-                                data-toggle="tab"
-                                href="#all"
-                                role="tab"
-                                aria-controls="all"
-                                aria-selected="true"
+                            class="nav-link active"
+                            id="all-tab"
+                            data-toggle="tab"
+                            href="#all"
+                            role="tab"
+                            aria-controls="all"
+                            aria-selected="true"
                         >
                             <i class="fas fa-globe"></i>
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="play-store-tab" data-toggle="tab" href="#play-store" role="tab" aria-controls="play-store" aria-selected="false"><i class="fab fa-google-play"></i> PlayStore</a>
+                        <a
+                            class="nav-link"
+                            id="play-store-tab"
+                            data-toggle="tab"
+                            href="#play-store"
+                            role="tab"
+                            aria-controls="play-store"
+                            aria-selected="false"
+                        >
+                            <span><i class="fab fa-google-play"></i>&nbsp;PlayMarket</span>
+                        </a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="app-store-tab" data-toggle="tab" href="#app-store" role="tab" aria-controls="app-store" aria-selected="false"><i class="fab fa-app-store"></i> AppStore</a>
+                        <a
+                            class="nav-link"
+                            id="app-store-tab"
+                            data-toggle="tab"
+                            href="#app-store"
+                            role="tab"
+                            aria-controls="app-store"
+                            aria-selected="false"
+                        >
+                            <span><i class="fab fa-app-store"></i>&nbsp;AppStore</span>
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
-        <div class="row">
+        <div class="row mt-2">
             <div class="col-12">
                 <div class="tab-content">
             </div>
         </div>
             <div
-                    class="tab-pane fade show active"
-                    id="all"
-                    role="tabpanel"
-                    aria-labelledby="all-tab"
+                class="tab-pane fade show active"
+                id="all"
+                role="tabpanel"
+                aria-labelledby="all-tab"
             >
                 {% for publisher in publishers %}
                     {{ include('publisher/_view.html.twig') }}
@@ -51,10 +69,10 @@
                 {% endfor %}
             </div>
             <div
-                    class="tab-pane fade"
-                    id="play-store"
-                    role="tabpanel"
-                    aria-labelledby="play-store-tab"
+                class="tab-pane fade"
+                id="play-store"
+                role="tabpanel"
+                aria-labelledby="play-store-tab"
             >
                 {% for publisher in publishers %}
                     {% if publisher.type == constant('App\\Entity\\Publisher::TYPE_PLAY_STORE') %}
@@ -64,9 +82,9 @@
                 {% endfor %}
             </div>
             <div
-                    class="tab-pane fade disabled"
-                    id="app-store" role="tabpanel"
-                    aria-labelledby="app-store-tab"
+                class="tab-pane fade disabled"
+                id="app-store" role="tabpanel"
+                aria-labelledby="app-store-tab"
             >
                 {% for publisher in publishers %}
                     {% if publisher.type == constant('App\\Entity\\Publisher::TYPE_APP_STORE') %}
@@ -76,13 +94,13 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="row">
+        <div class="row mt-2">
             <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel">Edit</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <p class="modal-title h5"  id="editModalLabel">Edit</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -92,29 +110,34 @@
                 </div>
             </div>
         </div>
-        <script>
-            $(function () {
-                $('input.ip-address').mask('0ZZ.0ZZ.0ZZ.0ZZ', {translation: {'Z': {pattern: /[0-9]/, optional: true}}});
-
-                $('[data-toggle="popover"]').popover();
-                $('.popover-dismiss').popover({trigger: 'focus'});
-
-                $('[data-toggle="tooltip"]').tooltip({boundary: 'window'});
-
-                $('body').on('click', '.modal-edit', function () {
-                    $('#editModal .modal-body').html('Loading...').load($(this).data("remote"), function () {
-                        $('#editModal input.ip-address').mask('0ZZ.0ZZ.0ZZ.0ZZ', {
-                            translation: {
-                                'Z': {
-                                    pattern: /[0-9]/,
-                                    optional: true
-                                }
-                            }
-                        });
-                    });
-                    $('#editModal').modal();
-                });
-            });
-        </script>
     </div>
+    <script>
+        $(function () {
+            $('input.ip-address').mask('0ZZ.0ZZ.0ZZ.0ZZ', {
+                translation: {
+                    'Z': {
+                        pattern: /[0-9]/,
+                        optional: true
+                    }
+                }
+            });
+            $('[data-toggle="popover"]').popover();
+            $('.popover-dismiss').popover({trigger: 'focus'});
+            $('[data-toggle="tooltip"]').tooltip({boundary: 'window'});
+
+            $('body').on('click', '.modal-edit', function () {
+                $('#editModal .modal-body').html('Loading...').load($(this).data("remote"), function () {
+                    $('#editModal input.ip-address').mask('0ZZ.0ZZ.0ZZ.0ZZ', {
+                        translation: {
+                            'Z': {
+                                pattern: /[0-9]/,
+                                optional: true
+                            }
+                        }
+                    });
+                });
+                $('#editModal').modal();
+            });
+        });
+    </script>
 {% endblock %}

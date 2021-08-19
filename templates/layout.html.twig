@@ -77,10 +77,7 @@
                 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
                     <a class="navbar-brand" href="/"> PlayMarket Apps parser</a>
                     {{ knp_menu_render('left') }}
-                    {{ knp_menu_render('right', {
-                        'template': 'menu.html.twig',
-                        'currentClass': 'active'
-                    }) }}
+                    {{ knp_menu_render('right', {'template': 'menu.html.twig', 'currentClass': 'active'}) }}
                 </nav>
             {% endblock %}
             {% block body %}{% endblock %}
