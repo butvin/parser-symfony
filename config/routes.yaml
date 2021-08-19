@@ -27,9 +27,3 @@ position_show:
 position_index_json:
   path: /api/position/{id}
   controller: App\Controller\PositionController::show
-
-
-
-
-
-

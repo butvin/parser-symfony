@@ -16,7 +16,7 @@ class PublisherType extends AbstractType
         $builder
             ->add('address', TextType::class, [
                 'label'    => 'Address',
-                'required' => true,
+                'required' => false,
             ])
             ->add('url', UrlType::class, [
                 'label'    => 'Publisher url',

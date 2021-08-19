@@ -4,11 +4,15 @@
 
 {% block body %}
     <div class="container-fluid">
-        <div class="row mt-2">
-            {{ include('publisher/_form.html.twig') }}
+        <div class="row">
+            <div class="col">
+                {{ include('publisher/_form.html.twig') }}
+            </div>
         </div>
+    </div>
+    <div class="container-fluid">
         <div class="row mt-2">
-            <div class="col-12">
+            <div class="col">
                 <ul class="nav nav-pills nav-fill" id="publisher-type-tab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <a
@@ -53,10 +57,9 @@
             </div>
         </div>
         <div class="row mt-2">
-            <div class="col-12">
-                <div class="tab-content">
+            <div class="col">
+                <div class="tab-content"></div>
             </div>
-        </div>
             <div
                 class="tab-pane fade show active"
                 id="all"
@@ -65,7 +68,6 @@
             >
                 {% for publisher in publishers %}
                     {{ include('publisher/_view.html.twig') }}
-                    <hr>
                 {% endfor %}
             </div>
             <div
@@ -89,24 +91,21 @@
                 {% for publisher in publishers %}
                     {% if publisher.type == constant('App\\Entity\\Publisher::TYPE_APP_STORE') %}
                         {{ include('publisher/_view.html.twig') }}
-                        <hr>
                     {% endif %}
                 {% endfor %}
             </div>
         </div>
-        <div class="row mt-2">
-            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <p class="modal-title h5"  id="editModalLabel">Edit</p>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body"></div>
-                        <div class="modal-footer"></div>
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title h5" id="editModalLabel">Edit</div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
+                    <div class="modal-body"></div>
+                    <div class="modal-footer"></div>
                 </div>
             </div>
         </div>

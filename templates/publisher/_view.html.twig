@@ -161,21 +161,19 @@
                                         >
                                             <i class="fas fa-list-ol"></i>
                                         </a>
-
                                         {% if application.reason %}
-                                            <a
-                                                tabindex="0"
-                                                class="btn btn-sm btn-danger btn-transparent shadow-sm"
-                                                role="button"
-                                                data-toggle="popover"
-                                                data-trigger="focus"
-                                                title="Reason"
-                                                data-content="{{ application.reason }}"
-                                            >
-                                                <i class="far fa-question-circle"></i>
-                                            </a>
+                                        <a
+                                            tabindex="0"
+                                            class="btn btn-sm btn-danger btn-transparent shadow-sm"
+                                            role="button"
+                                            data-toggle="popover"
+                                            data-trigger="focus"
+                                            title="Reason"
+                                            data-content="{{ application.reason }}"
+                                        >
+                                            <i class="far fa-question-circle"></i>
+                                        </a>
                                         {% endif %}
-
                                         <a
                                             href="{{ application.url }}"
                                             target="_blank"
