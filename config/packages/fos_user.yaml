@@ -8,5 +8,5 @@ fos_user:
     service:
         user_manager: sonata.user.orm.user_manager
     from_email:
-        address: "admin@wouff.com"
-        sender_name: "admin@wouff.com"
+        address: "admin@mail.com"
+        sender_name: "admin@mail.com"

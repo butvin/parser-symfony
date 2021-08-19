@@ -599,7 +599,7 @@
         "files": [
             "config/packages/test/twig.yaml",
             "config/packages/twig.yaml",
-            "templates/base.html.twig"
+            "templates/layout.html.twig"
         ]
     },
     "symfony/twig-pack": {

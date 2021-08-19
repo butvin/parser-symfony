@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Publisher;
@@ -16,8 +18,10 @@ class PublisherController extends AbstractController
     private EntityManagerInterface $em;
     private PublisherRepository $publisherRepository;
 
-    public function __construct(EntityManagerInterface $em, PublisherRepository $publisherRepository)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        PublisherRepository $publisherRepository
+    ) {
         $this->em = $em;
         $this->publisherRepository = $publisherRepository;
     }
@@ -43,10 +47,19 @@ class PublisherController extends AbstractController
 
     final public function edit(Publisher $publisher, Request $request): Response
     {
-        $action = $this->generateUrl('publisher_edit', ['id' => $publisher->getId()]);
+        $action = $this->generateUrl(
+            'publisher_edit',
+            ['id' => $publisher->getId()]
+        );
 
-        $form = $this->createForm(PublisherType::class, $publisher, ['action' => $action]);
+        $form = $this->createForm(
+            PublisherType::class,
+            $publisher,
+            ['action' => $action]
+        );
+
         $form->remove('url');
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -67,7 +80,8 @@ class PublisherController extends AbstractController
 
         uasort(
             $publishers,
-            static fn(Publisher $first, Publisher $second) => $second->getSortingScore() <=> $first->getSortingScore()
+            static fn(Publisher $first, Publisher $second) =>
+                $second->getSortingScore() <=> $first->getSortingScore()
         );
 
         return $publishers;

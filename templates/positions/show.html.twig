@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block title %}
     {{ application.name }}
@@ -11,8 +11,6 @@
             font-size:  1rem;
             line-height: 1;
             font-weight: 400 !important;
-            padding: 0;
-            margin: 0;
         }
         .monospace {
             font-family: Lucida Console, Courier, monospace;
@@ -82,8 +80,7 @@
             text-transform: uppercase;
         }
     </style>
-    <main class="container-fluid container-positions">
-
+    <div class="container container-positions">
         {% set up = '<i class="fas fa-caret-up text-index-number-success"></i>' %}
         {% set down = '<i class="fas fa-caret-down text-index-number-danger"></i>' %}
         {% set equal = '<i class="fas fa-equals text-dark"></i>' %}
@@ -93,12 +90,17 @@
         {% set no_index = 'отсуст.' %}
 
         <section class="row">
-            <div class="col-6">
+            <div class="col-12">
                 <p class="h2 mt-2">
                     <a class="link" href="{{ application.url }}" title="{{ application.name }}">
                         <span class="title sans-serif">{{ application.name }}</span>
                     </a>
                 </p>
+            </div>
+        </section>
+
+        <section class="row">
+            <div class="col-10">
                 <p class="h4 mt-2">
                     <span class="badge badge-light sans-serif">{{ category|upper }}</span>
                 </p>
@@ -107,11 +109,12 @@
                     <span class="badge badge-light sans-serif">{{ totalAmount }}</span>
                 </p>
             </div>
-            <div class="col-6">
+            <div class="col-2">
                 {% include 'positions/_form.html.twig' %}
             </div>
         </section>
-        <!-- TAB PANEL TITLES -->
+
+        <!-- TAB PANEL TABS -->
         <section class="mt-2">
             <nav class="justify-content-start">
                 <div class="nav nav-tabs sans-serif" id="nav-tab" role="tablist">
@@ -133,6 +136,7 @@
                 </div>
             </nav>
         </section>
+
         <!-- TAB CONTENT -->
         <section class="tab-content" id="nav-tabContent">
             {% if rating_types %}
@@ -152,11 +156,11 @@
                                 </caption>
                                 <thead class="thead-light">
                                     <tr class="border-top-0">
-                                        <th scope="col" class="align-bottom text-center num m-0 p-0"><i class="fas fa-list-ol"></i></th>
-                                        <th scope="col" class="align-middle">{{ 'country/region'|upper }}</th>
-                                        <th scope="col" class="align-middle">{{ rating_title|upper}}</th>
-                                        <th scope="col" class="align-middle">{{ 'apps'|upper }}</th>
-                                        <th scope="col" class="align-middle">{{ 'date'|upper }}</th>
+                                        <th scope="col" class="align-bottom text-center num "><i class="fas fa-list-ol"></i></th>
+                                        <th scope="col" class="align-bottom">{{ 'country/region'|upper }}</th>
+                                        <th scope="col" class="align-bottom">{{ rating_title|upper}}</th>
+                                        <th scope="col" class="align-bottom">{{ 'apps'|upper }}</th>
+                                        <th scope="col" class="align-bottom">{{ 'date'|upper }}</th>
                                     </tr>
                                 </thead>
                                 <tbody class="align-middle">
@@ -196,7 +200,7 @@
                 {% endfor %}
             {% endif %}
         </section>
-    </main>
+    </div>
     <script>
         $(document).ready(function () {
             const tabContentFirst = $('#nav-tab-1')

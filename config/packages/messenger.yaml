@@ -19,14 +19,14 @@ framework:
             sync: 'sync://'
             async_main_transport:
                 dsn: '%env(MESSENGER_TRANSPORT_MAIN_DSN)%'
-#            async_position_transport:
-#                dsn: '%env(MESSENGER_TRANSPORT_POSITION_DSN)%'
+            async_second_transport:
+                dsn: '%env(MESSENGER_TRANSPORT_SECOND_DSN)%'
 
         routing:
             'App\Message\PublisherParseMessage': sync
             'App\Message\PublisherErrorMessage': sync
-            'App\Message\PublisherDeleteMessage': async_main_transport
+            'App\Message\PublisherDeleteMessage': sync
             'App\Message\ApplicationDeleteMessage': sync
             'App\Message\ApplicationUpdateMessage': async_main_transport
-            'App\Message\PositionParseMessage': sync #async_position_transport
+            'App\Message\PositionParseMessage': sync #async_second_transport
 
