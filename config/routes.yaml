@@ -18,7 +18,6 @@ publisher_index:
   path: /
   controller: App\Controller\PublisherController::index
 
-
 #todo: regex validation to is param
 position_show:
   path: /position/{id}

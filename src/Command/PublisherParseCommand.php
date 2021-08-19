@@ -12,32 +12,44 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class PublisherParseCommand extends Command
 {
-    protected static $defaultName = 'app:publisher:parse';
-
+    protected static $defaultName = 'app:parse:publisher';
     private MessageBusInterface $bus;
+    private PublisherRepository $publisherRepository;
 
-    private PublisherRepository $repository;
-
-    public function __construct(MessageBusInterface $bus, PublisherRepository $repository)
+    public function __construct(MessageBusInterface $bus, PublisherRepository $publisherRepository)
     {
         $this->bus = $bus;
-        $this->repository = $repository;
-
+        $this->publisherRepository = $publisherRepository;
         parent::__construct();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    final public function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-
         $io->title('Run publisher parsers');
 
-        foreach ($this->repository->findAll() as $publisher) {
-            $io->text(sprintf('Send publisher #%s to queue.', $publisher->getId()));
+        $publishers = $this->publisherRepository->findAll();
 
-            $message = new PublisherParseMessage($publisher->getId());
-            $this->bus->dispatch($message);
+        if (empty($publishers)) {
+            $io->error("No countries to parse");
+            return 0;
         }
+
+        foreach ($publishers as $publisher) {
+            $io->writeln(
+                sprintf(
+                    'Push publisher to queue >>> #%s|%s ',
+                    $publisher->getId(),
+                    $publisher->getExternalId()
+                )
+            );
+
+            $this->bus->dispatch(
+                new PublisherParseMessage($publisher->getId())
+            );
+        }
+
+        $io->success(sprintf("Done! Pushed %s countries to queue", count($publishers)));
 
         return 0;
     }

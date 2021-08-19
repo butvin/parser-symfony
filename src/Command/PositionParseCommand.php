@@ -16,7 +16,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class PositionParseCommand extends Command
 {
-    protected static $defaultName = 'app:position:parse';
+    protected static $defaultName = 'app:parse:position';
     private MessageBusInterface $bus;
 
     public function __construct(MessageBusInterface $bus)
@@ -27,39 +27,37 @@ class PositionParseCommand extends Command
 
     protected function configure(): void
     {
-        $this->addArgument('url', InputArgument::OPTIONAL, 'PlayMarket apps positions parser');
+        $this->addArgument(
+            'url',
+            InputArgument::OPTIONAL,
+            'Google apps position parser'
+        );
     }
 
     final public function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->title(mb_strtoupper("Position's parser started..."));
+        $io->title(mb_strtoupper("Position's parser started"));
 
-        $countries = IntlHelper::TEST_COUNTRIES;
-        if (count($countries) < 1) {
+        $countries = IntlHelper::ISO3166_1_COUNTRIES;
+        if (empty($countries)) {
             $io->error("No countries to parse");
             return 0;
         }
 
-        $io->writeln(
-            '<info>'.
-                sprintf("Countries: <question>%s</question>", count($countries))
-            .'</info>'
-        );
+        $io->writeln('<info>'.
+            sprintf("Countries to parse: %s", count($countries))
+        .'</info>');
 
         foreach ($countries as $countryCode => $countryName) {
-            $io->writeln(
-                '<question>'.
-                    sprintf("Dispatched >> '%s' country | %s", $countryCode, $countryCode)
-                .'</question>'
-            );
+            $io->writeln('<question>'.
+                sprintf("Dispatched >>> country: %s code (ISO3166-1) %s", $countryCode, $countryName)
+            .'</question>');
 
             $this->bus->dispatch(new PositionParseMessage($countryCode));
         }
 
-        $io->success(
-            sprintf("Done! Pushed %s countries to queue", count($countries))
-        );
+        $io->success(sprintf("Done! Pushed %s countries to queue", count($countries)));
 
         return 0;
     }

@@ -1,7 +1,5 @@
 SHELL=/bin/bash
 
 0 * * * * docker restart proxy-scraper
-0 */2 * * * docker exec php-fpm bin/console app:publisher:parse
-0 */24 * * * docker exec php-fpm bin/console app:position:parse
-0 */2 * * * docker exec php-fpm bin/console app:store:publisher:parse
-0 */24 * * * docker exec php-fpm bin/console app:store:position:parse
+0 */2 * * * docker exec php-fpm bin/console app:parse:publisher
+0 */24 * * * docker exec php-fpm bin/console app:parse:position

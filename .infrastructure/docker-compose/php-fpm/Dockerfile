@@ -1,6 +1,5 @@
 FROM php:7.4-fpm
 
-# Fix debconf warnings upon .build
 ARG DEBIAN_FRONTEND=noninteractive
 ARG env
 
@@ -8,18 +7,22 @@ RUN apt-get update && apt-get install -y \
         librabbitmq-dev \
         libimage-exiftool-perl \
         libzip-dev \
+        apt-utils \
         zip \
         unzip \
         p7zip-full \
-        sendmail \
-    && pecl install amqp \
-    && docker-php-ext-enable amqp \
-    && docker-php-ext-install zip mysqli pdo pdo_mysql opcache
+        acl \
+        sendmail
+
+RUN pecl install amqp
+RUN docker-php-ext-enable amqp
+
+RUN docker-php-ext-install zip mysqli pdo pdo_mysql opcache
 
 # Install PHP Redis extension
 RUN pecl install -o -f redis \
-  &&  rm -rf /tmp/pear \
-  &&  docker-php-ext-enable redis
+  &&  rm -rf /tmp/pear
+RUN docker-php-ext-enable redis
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- \

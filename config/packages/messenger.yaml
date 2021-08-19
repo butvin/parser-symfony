@@ -19,8 +19,8 @@ framework:
             sync: 'sync://'
             async_main_transport:
                 dsn: '%env(MESSENGER_TRANSPORT_MAIN_DSN)%'
-            async_position_transport:
-                dsn: '%env(MESSENGER_TRANSPORT_POSITION_DSN)%'
+#            async_position_transport:
+#                dsn: '%env(MESSENGER_TRANSPORT_POSITION_DSN)%'
 
         routing:
             'App\Message\PublisherParseMessage': sync

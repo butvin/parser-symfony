@@ -1,25 +1,27 @@
 FROM php:7.4-cli
 
-# Fix debconf warnings upon .build
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
         locales \
         librabbitmq-dev \
+        acl \
         libimage-exiftool-perl \
         libzip-dev \
         zip \
         unzip \
         p7zip-full \
-        sendmail \
-    && pecl install amqp \
-    && docker-php-ext-enable amqp \
-    && docker-php-ext-install zip mysqli pdo pdo_mysql opcache
+        sendmail
+
+RUN pecl install amqp
+RUN docker-php-ext-enable amqp
+
+RUN docker-php-ext-install zip mysqli pdo pdo_mysql opcache
 
 # Install PHP Redis extension
 RUN pecl install -o -f redis \
-  &&  rm -rf /tmp/pear \
-  &&  docker-php-ext-enable redis
+  &&  rm -rf /tmp/pear
+RUN docker-php-ext-enable redis
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- \
@@ -29,8 +31,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
         composer
 
 # Set the locale
-RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
-    locale-gen
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
+    && locale-gen
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
