@@ -9,22 +9,6 @@ sonata_user_admin_resetting:
 fos_user:
   resource: "@FOSUserBundle/Resources/config/routing/all.xml"
 
-#store_position_test:
-#    path: /store/rating/{type}/{date}/{id}
-#    controller: App\Controller\AppStorePositionController::rating
-
-#store_position_index:
-#  path: /store/position/{id}
-#  controller: App\Controller\AppStorePositionController::index
-
-#store_publisher_edit:
-#  path: /store/{id}
-#  controller: App\Controller\AppStorePublisherController::edit
-
-#store_publisher_index:
-#  path: /store/
-#  controller: App\Controller\AppStorePublisherController::index
-
 #todo: regex validation to is param
 publisher_edit:
   path: /{id}

@@ -51,44 +51,8 @@ class User extends BaseUser
      */
     protected $plainPassword;
 
-    /**
-     * @ORM\OneToMany(targetEntity=AppStorePublisher::class, mappedBy="userId")
-     */
-    private Collection $storePublishers;
-
     public function __construct()
     {
         parent::__construct();
-        $this->storePublishers = new ArrayCollection();
-    }
-
-    /**
-     * @return Collection|AppStorePublisher[]
-     */
-    public function getStorePublishers(): Collection
-    {
-        return $this->storePublishers;
-    }
-
-    public function addStorePublisher(AppStorePublisher $storePublisher): self
-    {
-        if (!$this->storePublishers->contains($storePublisher)) {
-            $this->storePublishers[] = $storePublisher;
-            $storePublisher->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStorePublisher(AppStorePublisher $storePublisher): self
-    {
-        if ($this->storePublishers->removeElement($storePublisher)) {
-            // set the owning side to null (unless already changed)
-            if ($storePublisher->getUser() === $this) {
-                $storePublisher->setUser(null);
-            }
-        }
-
-        return $this;
     }
 }

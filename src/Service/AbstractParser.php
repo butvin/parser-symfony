@@ -96,10 +96,12 @@ abstract class AbstractParser
     {
         $proxy = $this->proxies->current();
 
-        $browser = new HttpBrowser(new CurlHttpClient([
-            'proxy'        => $proxy,
-            'max_duration' => self::REQUEST_TIMEOUT,
-        ]));
+        $browser = new HttpBrowser(new CurlHttpClient(
+            [
+                'proxy' => $proxy,
+                'max_duration' => self::REQUEST_TIMEOUT,
+            ]
+        ));
 
         try {
             dump(sprintf('Download "%s" with proxy "%s"', $url, $proxy));
