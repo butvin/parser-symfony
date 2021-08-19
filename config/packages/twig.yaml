@@ -6,4 +6,3 @@ twig:
     exception_controller: null
     paths:
         '%kernel.project_dir%/public/icons': mailIcons
-        '%kernel.project_dir%/public/storeIcons': appStoreMailIcons
