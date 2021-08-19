@@ -5,7 +5,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
         locales \
         librabbitmq-dev \
-        acl \
         libimage-exiftool-perl \
         libzip-dev \
         zip \
@@ -18,9 +17,10 @@ RUN docker-php-ext-enable amqp
 
 RUN docker-php-ext-install zip mysqli pdo pdo_mysql opcache
 
-# Install PHP Redis extension
+# Install redis extension
 RUN pecl install -o -f redis \
   &&  rm -rf /tmp/pear
+
 RUN docker-php-ext-enable redis
 
 # Install composer

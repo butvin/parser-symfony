@@ -264,10 +264,7 @@ class IntlHelper
         'FR' => 'France',
         'GB' => 'United Kingdom',
         'RU' => 'Russia',
-        'HU' => 'Hungary',
-        'IE' => 'Ireland',
-        'IL' => 'Israel',
-        'CZ' => 'CzechRepublic',
+        'CZ' => 'Czech Republic',
         'DE' => 'Germany',
     ];
 

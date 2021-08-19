@@ -16,7 +16,8 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class PositionParseCommand extends Command
 {
-    protected static $defaultName = 'app:parse:position';
+    protected static $defaultName = 'app:parse:positions';
+
     private MessageBusInterface $bus;
 
     public function __construct(MessageBusInterface $bus)
@@ -41,7 +42,7 @@ class PositionParseCommand extends Command
 
         $countries = IntlHelper::ISO3166_1_COUNTRIES;
         if (empty($countries)) {
-            $io->error("No countries to parse");
+            $io->warning("No countries to parse");
             return 0;
         }
 

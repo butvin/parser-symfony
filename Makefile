@@ -42,12 +42,10 @@ composer:
 
 migration:
 	docker exec -t php-fpm bash -c 'bin/console doctrine:migrations:migrate --no-interaction'
+	docker exec -t php-fpm bash -c 'php bin/console about'
 
 dev-user:
 	docker exec -t php-fpm bash -c 'php bin/console fos:user:create dev developer.name@mail.org dev --super-admin'
-
-permissions:
-	docker exec -t php-fpm bash -c 'sh /application/permissions.sh'
 
 worker-log:
 	docker-compose -f .infrastructure/docker-compose/docker-compose.cli.yml logs -f
@@ -58,3 +56,6 @@ worker-restart:
 
 php:
 	docker exec -it php-fpm bash
+
+permissions:
+	sh ./permissions.sh

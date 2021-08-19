@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Application;
 use App\Entity\Publisher;
+use App\Entity\User;
 use App\Form\PublisherType;
 use App\Repository\PublisherRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,21 +11,22 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-
 class PublisherController extends AbstractController
 {
     private EntityManagerInterface $em;
-    private PublisherRepository $repository;
+    private PublisherRepository $publisherRepository;
 
-    public function __construct(EntityManagerInterface $em, PublisherRepository $repository)
+    public function __construct(EntityManagerInterface $em, PublisherRepository $publisherRepository)
     {
         $this->em = $em;
-        $this->repository = $repository;
+        $this->publisherRepository = $publisherRepository;
     }
 
-    public function index(Request $request): Response
+    final public function index(Request $request): Response
     {
-        $publisher = new Publisher($this->getUser());
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $publisher = new Publisher($user);
         $form = $this->createForm(PublisherType::class, $publisher);
         $form->handleRequest($request);
 
@@ -40,7 +41,7 @@ class PublisherController extends AbstractController
         ]);
     }
 
-    public function edit(Publisher $publisher, Request $request): Response
+    final public function edit(Publisher $publisher, Request $request): Response
     {
         $action = $this->generateUrl('publisher_edit', ['id' => $publisher->getId()]);
 
@@ -62,12 +63,11 @@ class PublisherController extends AbstractController
 
     private function getPublishers(): array
     {
-        $publishers = $this->repository->findAll();
+        $publishers = $this->publisherRepository->findAll();
 
         uasort(
             $publishers,
-            static fn(Publisher $first, Publisher $second) =>
-                $second->getSortingScore() <=> $first->getSortingScore()
+            static fn(Publisher $first, Publisher $second) => $second->getSortingScore() <=> $first->getSortingScore()
         );
 
         return $publishers;

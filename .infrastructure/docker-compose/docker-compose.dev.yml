@@ -13,5 +13,5 @@ services:
       args:
         env: dev
     volumes:
-       - ~/.composer/docker-cache/:/root/.composer:cached
-       - ../../:/application
+      - ~/.composer/docker-cache/:/root/.composer:cached
+      - ../../:/application

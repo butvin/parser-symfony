@@ -7,19 +7,15 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/**
- * Auto-generated Migration: Please modify to your needs!
- */
 final class Version20210818233052 extends AbstractMigration
 {
     public function getDescription() : string
     {
-        return '';
+        return 'Startup project migration';
     }
 
     public function up(Schema $schema) : void
     {
-        // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE application (id INT AUTO_INCREMENT NOT NULL, publisher_id INT NOT NULL, category_id INT DEFAULT NULL, external_id VARCHAR(255) NOT NULL, url VARCHAR(2047) NOT NULL, icon VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, version VARCHAR(127) NOT NULL, purchases TINYINT(1) NOT NULL, reason LONGTEXT DEFAULT NULL, created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime)\', updated_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\', deleted_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\', INDEX IDX_A45BDDC140C86FCE (publisher_id), INDEX IDX_A45BDDC112469DE2 (category_id), UNIQUE INDEX UNIQ_A45BDDC140C86FCE9F75D7B0 (publisher_id, external_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE category (id INT AUTO_INCREMENT NOT NULL, external_id VARCHAR(127) NOT NULL, name VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_64C19C19F75D7B0 (external_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE position (id INT AUTO_INCREMENT NOT NULL, application_id INT NOT NULL, category_id INT NOT NULL, `index` INT DEFAULT NULL, `prev_index` INT DEFAULT NULL, rating_type VARCHAR(255) DEFAULT NULL, total_quantity VARCHAR(255) DEFAULT NULL, reason LONGTEXT DEFAULT NULL, locale VARCHAR(31) NOT NULL, country VARCHAR(31) NOT NULL, created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime)\', updated_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\', INDEX IDX_462CE4F53E030ACD (application_id), INDEX IDX_462CE4F512469DE2 (category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -39,7 +35,6 @@ final class Version20210818233052 extends AbstractMigration
 
     public function down(Schema $schema) : void
     {
-        // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE position DROP FOREIGN KEY FK_462CE4F53E030ACD');
         $this->addSql('ALTER TABLE application DROP FOREIGN KEY FK_A45BDDC112469DE2');
         $this->addSql('ALTER TABLE position DROP FOREIGN KEY FK_462CE4F512469DE2');

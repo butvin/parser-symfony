@@ -4,13 +4,13 @@ services:
     nginx:
         ports:
             - 80:80
-#            - 443:443
+        #            - 443:443
         build:
             args:
                 env: prod
         volumes:
             - /var/log/nginx:/var/log/nginx/
-    #        - /etc/nginx/ssl:/etc/nginx/ssl
+        #        - /etc/nginx/ssl:/etc/nginx/ssl
         restart: always
 
     php_fpm:

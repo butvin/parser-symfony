@@ -11,7 +11,6 @@ RUN apt-get update && apt-get install -y \
         zip \
         unzip \
         p7zip-full \
-        acl \
         sendmail
 
 RUN pecl install amqp
