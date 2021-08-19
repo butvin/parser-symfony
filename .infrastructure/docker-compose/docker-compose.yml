@@ -16,6 +16,7 @@ services:
     working_dir: /application
     environment:
       - DATABASE_TIMEZONE=UTC
+      - PHP_IDE_CONFIG="serverName=PHPSTORM"
 
   proxy_scraper:
     build: proxy-scraper

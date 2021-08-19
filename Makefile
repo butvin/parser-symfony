@@ -57,5 +57,8 @@ worker-restart:
 php:
 	docker exec -it php-fpm bash
 
+kill-all:
+	docker stop $(docker ps -q -a) && docker rm $(docker ps -q -a)
+
 permissions:
 	sh ./permissions.sh
