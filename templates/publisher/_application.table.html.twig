@@ -1,18 +1,20 @@
 <div id="collapse{{ publisher.id }}" class="collapse" aria-labelledby="heading{{ publisher.id }}" data-parent="#accordion">
     <div class="card-body">
         <div class="table-responsive">
-            <table id="appsTable-{{ publisher.id }}" class="compact display cell-bordered table table-sm table-hover">
+            <table id="appsTable-{{ publisher.id }}" class="compact display table-striped table table-sm table-hover">
                 <thead class="thead-light">
-                    <tr class="text-capitalize monospace">
-                        <th class="text-left align-middle">#</th>
-                        <th class="text-left align-middle">id</th>
-                        <th class="text-center align-middle w-100px"><i class="far fa-images"></i>&nbsp;icon</th>
-                        <th class="text-left align-middle">Name</th>
-                        <th class="text-left align-middle">Version</th>
-                        <th class="text-left align-middle">paid/free</th>
-                        <th class="text-left align-middle">Created&nbsp;At</th>
-                        <th class="text-left align-middle">Deleted&nbsp;At</th>
-                        <th class="text-center align-middle"><i class="fas fa-wrench"></i></th>
+                    <tr class="text-capitalize monospace m-0 p-0">
+                        <th class="text-center align-middle">#</th>
+                        <th class="text-center align-middle">id</th>
+                        <th class="">h2</th>
+                        <th class="">h3</th>
+                        <th class="text-left align-middle w-50px"><i class="far fa-images"></i>&nbsp;icon</th>
+                        <th class="text-left align-middle">name</th>
+                        <th class="text-left align-middle w-50px">version</th>
+                        <th class="text-center align-middle">paid/free</th>
+                        <th class="text-left align-middle">created&nbsp;at</th>
+                        <th class="text-left align-middle">deleted&nbsp;at</th>
+                        <th class="text-center align-middle"><i class="fas fa-wrench"></i>&nbsp;actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,69 +26,76 @@
                     {% else %}
                     <tr class="table-light">
                     {% endif %}
-                        <td class="text-center align-middle">
-                            <span>{{ loop.index }}</span>
-                        </td>
-                        <td class="text-center align-middle">
-                            <span>{{ application.id }}</span>
-                        </td>
-                        <td class="text-center align-middle w-50px">
-                            <img
-                                    class="w-50px"
-                                    src="{{ asset('icons/' ~ application.icon) }}"
-                                    alt="{{ application.name }}"
+                    <td class="text-center align-middle">
+                        <span class="badge badge-light">{{ loop.index }}</span>
+                    </td>
+                    <td class="text-center align-middle">
+                        <span class="badge badge-light">{{ publisher.id }}</span>
+                    </td>
+                    <td>h2</td>
+                    <td>h3</td>
+                    <td class="text-left align-middle">
+                        <img src="{{ asset('icons/' ~ application.icon) }}" class="w-50px" alt="{{ application.name }}">
+                    </td>
+                    <td>{{ application.name }}</td>
+                    <td class="align-middle text-left {% if application.isUpdated %}table-warning{% endif %}">
+                        {{ application.version }}
+                    </td>
+                    <td class="align-middle text-center">
+                        {% if application.purchases %}
+                        <div>
+                            <span class="badge badge-danger">
+                                <i class="fas fa-hand-holding-usd"></i>&nbsp;paid
+                            </span>
+                        </div>
+                        {% else %}
+                        <div>
+                            <span class="badge badge-success">
+                                <i class="fas fa-hands-helping" ></i>&nbsp;free
+                            </span>
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td>{{ application.createdAt|date('Y-m-d H:i:s') }}</td>
+                    <td>
+                        {{ application.deletedAt ? application.deletedAt|date('Y-m-d H:i:s') : '' }}
+                    </td>
+                    <td>
+                        <div class="inline">
+                            <!-- BUTTONS -->
+                            <a
+                                class="btn btn-sm btn-transparent shadow-sm {{ application.positions|length ? '': 'd-none' }}"
+                                role="link"
+                                tabindex="-1"
+                                href="position/{{ application.id }}"
+                                target="_blank"
+                                aria-disabled="{{ application.positions|length ? 'false': 'true' }}"
                             >
-                        </td>
-                        <td>{{ application.name }}</td>
-                        <td class="align-middle text-left {% if application.isUpdated %}table-warning{% endif %}">
-                            {{ application.version }}
-                        </td>
-                        <td class="align-middle text-left">
-                            {% if application.purchases %}
-                                <i class="fas fa-money-check-alt"></i>
+                                <i class="fas fa-chart-line"></i>
+                            </a>
+                            {% if application.reason %}
+                            <a
+                                tabindex="0"
+                                class="btn btn-sm btn-danger btn-transparent shadow-sm"
+                                role="link"
+                                data-toggle="popover"
+                                data-trigger="focus"
+                                title="Reason"
+                                data-content="{{ application.reason }}"
+                            >
+                                <i class="far fa-question-circle"></i>
+                            </a>
                             {% endif %}
-                        </td>
-                        <td>
-                            {{ application.createdAt|date('Y-m-d H:i:s') }}
-                        </td>
-                        <td>
-                            {{ application.deletedAt ? application.deletedAt|date('Y-m-d H:i:s') : '' }}
-                        </td>
-                        <td>
-                            <div class="inline">
-                                <a
-                                        class="btn btn-sm btn-transparent shadow-sm {{ application.positions|length ? '': 'd-none' }}"
-                                        role="link"
-                                        tabindex="-1"
-                                        href="position/{{ application.id }}"
-                                        target="_blank"
-                                        aria-disabled="{{ application.positions|length ? 'false': 'true' }}"
-                                >
-                                    <i class="fas fa-chart-line"></i>
-                                </a>
-                                {% if application.reason %}
-                                <a
-                                        tabindex="0"
-                                        class="btn btn-sm btn-danger btn-transparent shadow-sm"
-                                        role="button"
-                                        data-toggle="popover"
-                                        data-trigger="focus"
-                                        title="Reason"
-                                        data-content="{{ application.reason }}"
-                                >
-                                    <i class="far fa-question-circle"></i>
-                                </a>
-                                {% endif %}
-                                <a
-                                        href="{{ application.url }}"
-                                        target="_blank"
-                                        class="btn btn-sm btn-transparent shadow-sm"
-                                        role="button"
-                                >
-                                    <i class="fa fa-external-link-alt"></i>
-                                </a>
-                            </div>
-                        </td>
+                            <a
+                                href="{{ application.url }}"
+                                target="_blank"
+                                class="btn btn-sm btn-light shadow-sm"
+                                role="link"
+                            >
+                                <i class="fa fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -103,9 +112,11 @@
             console.log()
 
             table_selector.DataTable({
+                retrieve: true,
                 paging:   true,
                 ordering: true,
-                info: true
+                info: true,
+                order: [[ 1, 'desc' ]]
             })
         });
     </script>

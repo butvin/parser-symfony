@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Menu;
 
 use Knp\Menu\FactoryInterface;
@@ -10,7 +12,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class MenuBuilder
 {
     private Security $security;
-
     private FactoryInterface $factory;
 
     public function __construct(Security $security, FactoryInterface $factory)
@@ -19,7 +20,7 @@ class MenuBuilder
         $this->factory = $factory;
     }
 
-    public function createLeftMenu(array $options): ItemInterface
+    final public function createLeftMenu(array $options): ItemInterface
     {
         $menu = $this->factory->createItem('root');
         $menu->setChildrenAttribute('class', 'navbar-nav mr-auto');
@@ -31,14 +32,15 @@ class MenuBuilder
         }
 
         foreach ($menu as $child) {
-            $child->setLinkAttribute('class', 'nav-link')
+            $child
+                ->setLinkAttribute('class', 'nav-link')
                 ->setAttribute('class', 'nav-item');
         }
 
         return $menu;
     }
 
-    public function createRightMenu(array $options): ItemInterface
+    final public function createRightMenu(array $options): ItemInterface
     {
         $menu = $this->factory->createItem('root');
         $menu->setChildrenAttribute('class', 'navbar-nav ml-auto');
@@ -58,11 +60,12 @@ class MenuBuilder
 
     private function createLeftUserMenu(ItemInterface $menu, UserInterface $user): void
     {
+        //todo
     }
 
     private function createLeftGuestMenu(ItemInterface $menu): void
     {
-
+        //todo
     }
 
     private function createRightUserMenu(ItemInterface $menu, UserInterface $user): void
@@ -73,7 +76,7 @@ class MenuBuilder
             ],
             'linkAttributes' => [
                 'class' => 'nav-link dropdown-toggle',
-                'role'  => 'button',
+                'role' => 'button',
                 'data-toggle' => 'dropdown',
             ],
             'uri' => '#',

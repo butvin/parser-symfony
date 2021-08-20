@@ -1,4 +1,13 @@
 <div id="accordion">
+    <script>
+        $(() => {
+            const sourсeRedirect = $('#btn-go-source');
+            sourсeRedirect.on('click', function (event) {
+
+            })
+        });
+
+    </script>
     {% set state = '' %}
     {% set time = 'Updated ' ~  publisher.updatedAt|ago %}
     {% set newApplications = publisher.newApplications|length %}
@@ -46,7 +55,7 @@
         {% set description = description ~ '<br/><b>Dedicated number</b>: ' ~ publisher.number %}
     {% endif %}
 
-    <div id="card-id-{{ publisher.id }}" class="card">
+    <div id="card-id-{{ publisher.id }}" class="card shadow">
         <a
                 class="btn flex-column align-items-start"
                 data-toggle="collapse"
@@ -54,8 +63,11 @@
                 aria-expanded="true"
                 aria-controls="collapse{{ publisher.id }}"
         >
-            <div class="card-header d-flex w-100 justify-content-between {{ state }}" id="heading{{ publisher.id }}">
+            <div class="card-header d-flex w-100 shadow-sm justify-content-between {{ state }}" id="heading{{ publisher.id }}">
                 <div>
+                    <p class="h5 mb-1" style="display: inline-block;">
+                        <span class="badge badge-dark">{{ publisher.id }}</span>
+                    </p>
                     {% if publisher.number %}
                     <p class="h5 mb-1" style="display: inline-block;">
                         <span class="badge badge-info modal-edit" data-remote="{{ url('publisher_edit', {id: publisher.id}) }}">
@@ -63,9 +75,12 @@
                         </span>
                     </p>
                     {% endif %}
-                    <p class="h5 mb-0" onclick="window.open('{{ publisher.url }}', '_blank');" style="display: inline-block;">
+                    <span
+                        class="btn-go-source h5" style="display: inline-block;"
+                        onclick="window.open('{{ publisher.url }}', '_blank');"
+                    >
                         {{ title | raw }}
-                    </p>
+                    </span>
                     <span class="text-secondary">({{ publisher.applications|length }})</span>
                     {% if publisher.address %}
                     <p class="h5 mb-1" style="display: inline-block;">
@@ -74,7 +89,7 @@
                         </span>
                     </p>
                     {% endif %}
-                    <p class="h5 mb-1" style="display: inline-block;">
+                    <p class="h5" style="display: inline-block;">
                         <i
                                 class="fas fa-info modal-edit"
                                 data-toggle="tooltip"

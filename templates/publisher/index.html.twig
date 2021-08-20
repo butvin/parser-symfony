@@ -18,6 +18,8 @@
   }
   .w-100px {
     width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
   }
   .w-50px {
     width: 50px !important;
@@ -30,86 +32,89 @@
   }
 </style>
 <!-- Form layout -->
-<div class="container-fluid p-0 m-0">
+<div class="container-fluid stellar">
     {{ include('publisher/_form.html.twig') }}
 </div>
 
 <!-- Tab panel -->
-<div class="container-fluid p-0 m-0">
-    <div class="row mt-2">
-        <div class="col-12 ">
-            <ul class="nav nav-pills nav-fill w-100" id="publisher-type-tab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a
-                            class="nav-link  active"
-                            id="all-tab"
-                            data-toggle="tab"
-                            href="#all"
-                            role="tab"
-                            aria-controls="all"
-                            aria-selected="true"
-                    >
-                        <i class="fas fa-globe"></i>
-                    </a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a
-                            class="nav-link"
-                            id="play-store-tab"
-                            data-toggle="tab"
-                            href="#play-store"
-                            role="tab"
-                            aria-controls="play-store"
-                            aria-selected="false"
-                    >
-                        <span class="monospaced"><i class="fab fa-google-play"></i>&nbsp;PlayMarket</span>
-                    </a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a
-                            class="nav-link"
-                            id="app-store-tab"
-                            data-toggle="tab"
-                            href="#app-store"
-                            role="tab"
-                            aria-controls="app-store"
-                            aria-selected="false"
-                    >
-                        <span><i class="fab fa-app-store"></i>&nbsp;AppStore</span>
-                    </a>
-                </li>
-            </ul>
+<div class="container-fluid key-meh">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <ul class="nav nav-pills nav-fill w-100 mt-2 mb-2" id="publisher-type-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a
+                                class="nav-link w-100px active"
+                                id="all-tab"
+                                data-toggle="tab"
+                                href="#all"
+                                role="tab"
+                                aria-controls="all"
+                                aria-selected="true"
+                        >
+                            <span class="monospaced"><i class="fas fa-globe"></i>&nbsp;All</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a
+                                class="nav-link"
+                                id="play-store-tab"
+                                data-toggle="tab"
+                                href="#play-store"
+                                role="tab"
+                                aria-controls="play-store"
+                                aria-selected="false"
+                        >
+                            <span class="monospaced"><i class="fab fa-google-play"></i>&nbsp;PlayMarket</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a
+                                class="nav-link"
+                                id="app-store-tab"
+                                data-toggle="tab"
+                                href="#app-store"
+                                role="tab"
+                                aria-controls="app-store"
+                                aria-selected="false"
+                        >
+                            <span><i class="fab fa-app-store"></i>&nbsp;AppStore</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
+
 <!-- Accordion layout -->
-<div class="container-fluid p-0 m-0">
-    <div class="row mt-2">
-        <div class="col-12">
-            <div class="tab-content">
-                <h1 class="h4">
-                    Publishers on target:
-                </h1>
+<div class="container-fluid orange-coral">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="tab-content">
+                    <h1 class="h4"> Publishers on target:</h1>
+                </div>
             </div>
-        </div>
-        <div id="all" class="tab-pane fade show active w-100" role="tabpanel" aria-labelledby="all-tab">
-            {% for publisher in publishers %}
-                {{ include('publisher/_view.html.twig') }}
-            {% endfor %}
-        </div>
-        <div id="play-store" class="tab-pane fade" role="tabpanel" aria-labelledby="play-store-tab">
-            {% for publisher in publishers %}
-                {% if publisher.type == constant('App\\Entity\\Publisher::TYPE_PLAY_STORE') %}
-                    {{ include('publisher/_view.html.twig') }}
-                {% endif %}
-            {% endfor %}
-        </div>
-        <div class="tab-pane fade" id="app-store" role="tabpanel"  aria-labelledby="app-store-tab">
-            {% for publisher in publishers %}
-                {% if publisher.type == constant('App\\Entity\\Publisher::TYPE_APP_STORE') %}
-                    {{ include('publisher/_view.html.twig') }}
-                {% endif %}
-            {% endfor %}
+            <div id="all" class="tab-pane fade show active w-100" role="tabpanel" aria-labelledby="all-tab">
+                {% for publisher in publishers %}
+                    {{ include('publisher/tab_view.html.twig') }}
+                {% endfor %}
+            </div>
+            <div id="play-store" class="tab-pane fade" role="tabpanel" aria-labelledby="play-store-tab">
+                {% for publisher in publishers %}
+                    {% if publisher.type == constant('App\\Entity\\Publisher::TYPE_PLAY_STORE') %}
+                        {{ include('publisher/tab_view.html.twig') }}
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div  id="app-store"  class="tab-pane fade" role="tabpanel"  aria-labelledby="app-store-tab">
+                {% for publisher in publishers %}
+                    {% if publisher.type == constant('App\\Entity\\Publisher::TYPE_APP_STORE') %}
+                        {{ include('publisher/tab_view.html.twig') }}
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>
@@ -119,10 +124,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title h5" id="editModalLabel">Edit</div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <div class="modal-title h5" id="editModalLabel">Edit </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer"></div>
@@ -130,33 +133,27 @@
     </div>
 </div>
 <script>
-    $(function () {
-        $('input.ip-address').mask('0ZZ.0ZZ.0ZZ.0ZZ', {
+    $(() => {
+        const translation = {
             translation: {
                 'Z': {
                     pattern: /[0-9]/,
                     optional: true
                 }
             }
-        });
+        };
+        const pattern = '0ZZ.0ZZ.0ZZ.0ZZ';
 
-        $('[data-toggle="popover"]').popover();
-        $('.popover-dismiss').popover({trigger: 'focus'});
-        $('[data-toggle="tooltip"]').tooltip({boundary: 'window'});
+        $('[data-toggle="popover"]').popover()
+        $('.popover-dismiss').popover({trigger: 'focus'})
+        $('[data-toggle="tooltip"]').tooltip({boundary: 'window'})
+        $('input.ip-address').mask(pattern, translation)
 
         $('body').on('click', '.modal-edit', function () {
             $('#editModal .modal-body').html('Loading...').load($(this).data("remote"), function () {
-                $('#editModal input.ip-address').mask('0ZZ.0ZZ.0ZZ.0ZZ', {
-                    translation: {
-                        'Z': {
-                            pattern: /[0-9]/,
-                            optional: true
-                        }
-                    }
-                });
+                $('#editModal input.ip-address').mask(pattern, translation);
             });
             $('#editModal').modal({
-
             });
         });
     });
