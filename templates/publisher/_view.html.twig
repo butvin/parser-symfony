@@ -46,150 +46,63 @@
         {% set description = description ~ '<br/><b>Dedicated number</b>: ' ~ publisher.number %}
     {% endif %}
 
-    <div class="card">
+    <div id="card-id-{{ publisher.id }}" class="card">
         <a
-            class="btn flex-column align-items-start"
-            data-toggle="collapse"
-            data-target="#collapse{{ publisher.id }}"
-            aria-expanded="true"
-            aria-controls="collapse{{ publisher.id }}"
+                class="btn flex-column align-items-start"
+                data-toggle="collapse"
+                data-target="#collapse{{ publisher.id }}"
+                aria-expanded="true"
+                aria-controls="collapse{{ publisher.id }}"
         >
             <div class="card-header d-flex w-100 justify-content-between {{ state }}" id="heading{{ publisher.id }}">
                 <div>
                     {% if publisher.number %}
-                        <p class="h5 mb-1" style="display: inline-block;">
-                            <span class="badge badge-info modal-edit" data-remote="{{ url('publisher_edit', {id: publisher.id}) }}">
-                                {{ publisher.number }}
-                            </span>
-                        </p>
+                    <p class="h5 mb-1" style="display: inline-block;">
+                        <span class="badge badge-info modal-edit" data-remote="{{ url('publisher_edit', {id: publisher.id}) }}">
+                            {{ publisher.number }}
+                        </span>
+                    </p>
                     {% endif %}
                     <p class="h5 mb-0" onclick="window.open('{{ publisher.url }}', '_blank');" style="display: inline-block;">
                         {{ title | raw }}
                     </p>
                     <span class="text-secondary">({{ publisher.applications|length }})</span>
                     {% if publisher.address %}
-                        <p class="h5 mb-1" style="display: inline-block;">
-                            <span class="badge badge-primary modal-edit"  data-remote="{{ url('publisher_edit', {id: publisher.id}) }}">
-                                {{ publisher.address }}
-                            </span>
-                        </p>
+                    <p class="h5 mb-1" style="display: inline-block;">
+                        <span class="badge badge-primary modal-edit"  data-remote="{{ url('publisher_edit', {id: publisher.id}) }}">
+                            {{ publisher.address }}
+                        </span>
+                    </p>
                     {% endif %}
                     <p class="h5 mb-1" style="display: inline-block;">
                         <i
-                            class="fas fa-info modal-edit"
-                            data-toggle="tooltip"
-                            data-placement="top"
-                            data-html="true"
-                            title="{{ description|e('html') }}"
-                            data-remote="{{ url('publisher_edit', {id: publisher.id}) }}"
-                            style="margin-left: 5px"
+                                class="fas fa-info modal-edit"
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                data-html="true"
+                                title="{{ description|e('html') }}"
+                                data-remote="{{ url('publisher_edit', {id: publisher.id}) }}"
+                                style="margin-left: 5px"
                         ></i>
                     </p>
                 </div>
-
                 <span>
                     {{ time }}
                     {% if publisher.reason %}
-                        <i
+                    <i
                             class="far fa-question-circle"
                             tabindex="0"
                             data-toggle="popover"
                             data-trigger="focus"
                             title="Reason"
                             data-content="{{ publisher.reason }}"
-                        ></i>
+                    ></i>
                     {% endif %}
                 </span>
             </div>
         </a>
         {% if publisher.applications|length %}
-            <div
-                id="collapse{{ publisher.id }}"
-                class="collapse show"
-                aria-labelledby="heading{{ publisher.id }}"
-                data-parent="#accordion"
-            >
-                <div class="card-body">
-                    <table class="table table-sm table-hover">
-                        <thead>
-                            <tr>
-                                <th class="text-left">Icon</th>
-                                <th class="text-left">Name</th>
-                                <th class="text-left">Version</th>
-                                <th class="text-left">Purchases</th>
-                                <th class="text-left">Created&nbsp;At</th>
-                                <th class="text-left">Deleted&nbsp;At</th>
-                                <th class="text-left">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {% for application in get_sorted_publisher_apps(publisher) %}
-                            {% if application.deletedAt %}
-                                <tr class="table-danger align-middle">
-                            {% elseif application.createdAt > date()|date_modify("-1 day") %}
-                                <tr class="table-success align-middle">
-                            {% else %}
-                                <tr class="align-middle">
-                            {% endif %}
-                                <td>
-                                    <img class="img-thumbnail w-25" src="{{ asset('icons/' ~ application.icon) }}" alt="{{ application.name }}"/>
-                                </td>
-                                <td>{{ application.name }}</td>
-                                <td class="align-middle text-left {% if application.isUpdated %}table-warning{% endif %}">
-                                    {{ application.version }}
-                                </td>
-                                <td class="align-middle text-left">
-                                    {% if application.purchases %}
-                                        <i class="fas fa-money-check-alt"></i>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {{ application.createdAt|date('Y-m-d H:i:s') }}
-                                </td>
-                                <td>
-                                    {{ application.deletedAt ? application.deletedAt|date('Y-m-d H:i:s') : '' }}
-                                </td>
-                                <td>
-                                    <div class="inline">
-                                        <a
-                                            class="btn btn-sm btn-transparent shadow-sm {{ application.positions|length ? '': 'd-none' }}"
-                                            role="button"
-                                            tabindex="-1"
-                                            href="position/{{ application.id }}"
-                                            target="_blank"
-                                            aria-disabled="{{ application.positions|length ? 'false': 'true' }}"
-                                        >
-                                            <i class="fas fa-list-ol"></i>
-                                        </a>
-                                        {% if application.reason %}
-                                        <a
-                                            tabindex="0"
-                                            class="btn btn-sm btn-danger btn-transparent shadow-sm"
-                                            role="button"
-                                            data-toggle="popover"
-                                            data-trigger="focus"
-                                            title="Reason"
-                                            data-content="{{ application.reason }}"
-                                        >
-                                            <i class="far fa-question-circle"></i>
-                                        </a>
-                                        {% endif %}
-                                        <a
-                                            href="{{ application.url }}"
-                                            target="_blank"
-                                            class="btn btn-sm btn-transparent shadow-sm"
-                                            role="button"
-                                        >
-                                            <i class="fa fa-external-link-alt"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            {% include('publisher/_application.table.html.twig') %}
         {% endif %}
     </div>
 </div>
