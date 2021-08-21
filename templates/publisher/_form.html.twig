@@ -7,28 +7,42 @@
 </style>
 <div class="container">
     <div class="row">
-        <div class="col">
-            <div class="form-wrapper">
+{#        {{ form_start(form, {'attr': {'class': 'your-class'}} ) }}#}
+{#        {{ form_label(form, {'attr': {'class': 'your-class'}}) }}#}
+{#        {{ form_widget(form, {'attr': {'class': 'your-class'}}) }}#}
+{#        {{ form_errors(form, {'attr': {'class': 'your-class'}}) }}#}
+{#        {{ form_end(form) }}#}
+        <div class="col-2"></div>
+        <div class="col-8">
+            <div class="form-wrapper p-2 m-2 dark-butvin border shadow">
                 {{ form_start(form, {
                     'id': 'form-add-publisher',
                     'action': path('publisher_index'),
                     'method': 'POST',
                     'multipart': true
                 }) }}
+
                 {% if form_errors(form)|length > 0 %}
                     {{ form_errors(form) }}
                 {% endif %}
-                {{ form_row(form.address) }}
-                {{ form_row(form.number) }}
+
+{#                {{ form_row(form.address) }}#}
+{#                {{ form_row(form.number) }}#}
+{{ form.address }}
+{{ form.number}}
+
+
                 {% if form.url is defined %}
                     {{ form_row(form.url) }}
                 {% endif %}
-                <div class="form-row">
+
+                <div class="form-group">
                     <button class="btn btn-primary" type="submit">save</button>
                 </div>
                 {{ form_end(form) }}
             </div>
         </div>
+        <div class="col-2"></div>
     </div>
 </div>
 {% endblock %}

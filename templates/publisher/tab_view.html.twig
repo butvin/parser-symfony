@@ -1,12 +1,12 @@
 <div id="accordion">
     <script>
         $(() => {
-            const sourсeRedirect = $('#btn-go-source');
-            sourсeRedirect.on('click', function (event) {
-
+            const sourceRedirect = $('#btn-go-source');
+            sourceRedirect.on('click', function (event) {
+                console.log(this)
             })
         });
-
+        // <i class="fab fa-linux"></i>
     </script>
     {% set state = '' %}
     {% set time = 'Updated ' ~  publisher.updatedAt|ago %}
@@ -38,12 +38,12 @@
 
     {% if publisher.deletedAt is not null %}
         {% set state = 'alert-danger' %}
-        {% set time = 'Deleted ' ~  publisher.deletedAt|ago %}
+        {% set time = 'Deleted from market ' ~  publisher.deletedAt|ago %}
         {% set time = publisher.name is null ? 'Publisher not found' : 'Deleted ' ~  publisher.deletedAt|ago %}
         {% set title = publisher.name is null ? '#' ~ publisher.id ~ ' ' ~ publisher.url : title %}
     {% elseif publisher.name is null %}
         {% set state = 'alert-warning text-muted' %}
-        {% set time = 'Waiting for synchronization' %}
+        {% set time = 'Await for sync...' %}
         {% set title = '#' ~ publisher.id ~ ' ' ~ publisher.externalId %}
     {% elseif (publisher.createdAt|date('Y-m-d') == "now"|date('Y-m-d')) %}
         {% set state = 'alert-success' %}

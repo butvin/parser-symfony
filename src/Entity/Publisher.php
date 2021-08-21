@@ -57,8 +57,7 @@ class Publisher
     private string $externalId;
 
     /**
-     * @Assert\NotBlank
-     *
+     * @Assert\NotBlank(message="Enter a valid ip network address")
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private ?string $address;

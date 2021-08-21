@@ -30,70 +30,45 @@
   .w-10px {
     width: 10px !important;
   }
+  .fiolent {
+    color: #A593E0;
+  }
+  .gray-butvin {
+    color: #E0E3DA;
+  }
+  .dark-butvin {
+    color: #566270;
+  }
+  .white-butvin {
+    color: #FFFFF3;
+  }
+  .danger-butvin {
+    background: tomato;
+    /*background: #F68657;*/
+    color: #FFFFF3;
+  }
 </style>
 <!-- Form layout -->
-<div class="container-fluid stellar">
+<div class="container-fluid">
     {{ include('publisher/_form.html.twig') }}
 </div>
 
-<!-- Tab panel -->
-<div class="container-fluid key-meh">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <ul class="nav nav-pills nav-fill w-100 mt-2 mb-2" id="publisher-type-tab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <a
-                                class="nav-link w-100px active"
-                                id="all-tab"
-                                data-toggle="tab"
-                                href="#all"
-                                role="tab"
-                                aria-controls="all"
-                                aria-selected="true"
-                        >
-                            <span class="monospaced"><i class="fas fa-globe"></i>&nbsp;All</span>
-                        </a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a
-                                class="nav-link"
-                                id="play-store-tab"
-                                data-toggle="tab"
-                                href="#play-store"
-                                role="tab"
-                                aria-controls="play-store"
-                                aria-selected="false"
-                        >
-                            <span class="monospaced"><i class="fab fa-google-play"></i>&nbsp;PlayMarket</span>
-                        </a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a
-                                class="nav-link"
-                                id="app-store-tab"
-                                data-toggle="tab"
-                                href="#app-store"
-                                role="tab"
-                                aria-controls="app-store"
-                                aria-selected="false"
-                        >
-                            <span><i class="fab fa-app-store"></i>&nbsp;AppStore</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Accordion layout -->
-<div class="container-fluid orange-coral">
+<!-- MAIN -->
+<div class="container-fluid">
+    <!-- Accordion layout -->
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="tab-content">
-                    <h1 class="h4"> Publishers on target:</h1>
+                    <div class="jumbotron jumbotron-fluid pt-2 pb-2 m-2 shadow">
+                        <div class="container-fluid">
+                            <h1 class="display-5 text-capitalize">Publishers overviews</h1>
+                            <p class="lead monospace h1">
+                                Active publishers on target
+                                <span class="badge badge-pill badge-dark">{{ publishers|length }}</span>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div id="all" class="tab-pane fade show active w-100" role="tabpanel" aria-labelledby="all-tab">
@@ -101,25 +76,11 @@
                     {{ include('publisher/tab_view.html.twig') }}
                 {% endfor %}
             </div>
-            <div id="play-store" class="tab-pane fade" role="tabpanel" aria-labelledby="play-store-tab">
-                {% for publisher in publishers %}
-                    {% if publisher.type == constant('App\\Entity\\Publisher::TYPE_PLAY_STORE') %}
-                        {{ include('publisher/tab_view.html.twig') }}
-                    {% endif %}
-                {% endfor %}
-            </div>
-            <div  id="app-store"  class="tab-pane fade" role="tabpanel"  aria-labelledby="app-store-tab">
-                {% for publisher in publishers %}
-                    {% if publisher.type == constant('App\\Entity\\Publisher::TYPE_APP_STORE') %}
-                        {{ include('publisher/tab_view.html.twig') }}
-                    {% endif %}
-                {% endfor %}
-            </div>
         </div>
     </div>
 </div>
 
-<!-- Modal window -->
+<!-- MODAL -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel">
     <div class="modal-dialog">
         <div class="modal-content">

@@ -1,21 +1,25 @@
+{% block accordion %}
 <div id="collapse{{ publisher.id }}" class="collapse" aria-labelledby="heading{{ publisher.id }}" data-parent="#accordion">
     <div class="card-body">
         <div class="table-responsive">
-            <table id="appsTable-{{ publisher.id }}" class="compact display table-striped table table-sm table-hover">
+            <table
+                    id="appsTable-{{ publisher.id }}"
+                    class="datatable-publishers-apps compact w-100 display table-striped table table-sm table-hover"
+            >
                 <thead class="thead-light">
-                    <tr class="text-capitalize monospace m-0 p-0">
-                        <th class="text-center align-middle">#</th>
-                        <th class="text-center align-middle">id</th>
-                        <th class="">h2</th>
-                        <th class="">h3</th>
-                        <th class="text-left align-middle w-50px"><i class="far fa-images"></i>&nbsp;icon</th>
-                        <th class="text-left align-middle">name</th>
-                        <th class="text-left align-middle w-50px">version</th>
-                        <th class="text-center align-middle">paid/free</th>
-                        <th class="text-left align-middle">created&nbsp;at</th>
-                        <th class="text-left align-middle">deleted&nbsp;at</th>
-                        <th class="text-center align-middle"><i class="fas fa-wrench"></i>&nbsp;actions</th>
-                    </tr>
+                <tr class="text-capitalize monospace m-0 p-0">
+                    <th class="text-center align-middle">#</th>
+                    <th class="text-center align-middle">id</th>
+                    <th class="">h2</th>
+                    <th class="">h3</th>
+                    <th class="text-left align-middle w-50px"><i class="far fa-images"></i>&nbsp;icon</th>
+                    <th class="text-left align-middle w-100">name</th>
+                    <th class="text-left align-middle w-50px">version</th>
+                    <th class="text-center align-middle">paid/free</th>
+                    <th class="text-left align-middle">created&nbsp;at</th>
+                    <th class="text-left align-middle">deleted&nbsp;at</th>
+                    <th class="text-center align-middle w-50px"><i class="fas fa-wrench"></i></th>
+                </tr>
                 </thead>
                 <tbody>
                 {% for application in get_sorted_publisher_apps(publisher) %}
@@ -29,95 +33,111 @@
                     <td class="text-center align-middle">
                         <span class="badge badge-light">{{ loop.index }}</span>
                     </td>
+
                     <td class="text-center align-middle">
-                        <span class="badge badge-light">{{ publisher.id }}</span>
+                        <span class="text-muted">{{ application.id }}</span>
                     </td>
                     <td>h2</td>
                     <td>h3</td>
                     <td class="text-left align-middle">
                         <img src="{{ asset('icons/' ~ application.icon) }}" class="w-50px" alt="{{ application.name }}">
                     </td>
+
                     <td>{{ application.name }}</td>
-                    <td class="align-middle text-left {% if application.isUpdated %}table-warning{% endif %}">
-                        {{ application.version }}
-                    </td>
+
+                    <td class="align-middle text-left {% if application.isUpdated %}table-warning{% endif %}">{{ application.version }}</td>
                     <td class="align-middle text-center">
                         {% if application.purchases %}
                         <div>
-                            <span class="badge badge-danger">
-                                <i class="fas fa-hand-holding-usd"></i>&nbsp;paid
-                            </span>
+                            <span class="badge danger-butvin"><i class="fas fa-hand-holding-usd"></i>&nbsp;paid</span>
                         </div>
                         {% else %}
                         <div>
-                            <span class="badge badge-success">
-                                <i class="fas fa-hands-helping" ></i>&nbsp;free
-                            </span>
+                            <span class="badge badge-success"> <i class="fas fa-hands-helping"></i>&nbsp;free</span>
                         </div>
                         {% endif %}
                     </td>
-                    <td>{{ application.createdAt|date('Y-m-d H:i:s') }}</td>
                     <td>
-                        {{ application.deletedAt ? application.deletedAt|date('Y-m-d H:i:s') : '' }}
+                        <span>{{ application.createdAt|date('d M y') }}</span>
+                        <span class="text-muted">{{ application.createdAt|date('H:i:s') }}</span>
                     </td>
                     <td>
-                        <div class="inline">
+                        {% if application.deletedAt %}
+                            <span>{{ application.deletedAt|date('Y-d-m H:i:s') }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="align-middle">
+                        <div class="d-flex">
                             <!-- BUTTONS -->
-                            <a
-                                class="btn btn-sm btn-transparent shadow-sm {{ application.positions|length ? '': 'd-none' }}"
-                                role="link"
-                                tabindex="-1"
-                                href="position/{{ application.id }}"
-                                target="_blank"
-                                aria-disabled="{{ application.positions|length ? 'false': 'true' }}"
-                            >
-                                <i class="fas fa-chart-line"></i>
-                            </a>
-                            {% if application.reason %}
-                            <a
-                                tabindex="0"
-                                class="btn btn-sm btn-danger btn-transparent shadow-sm"
-                                role="link"
-                                data-toggle="popover"
-                                data-trigger="focus"
-                                title="Reason"
-                                data-content="{{ application.reason }}"
-                            >
-                                <i class="far fa-question-circle"></i>
-                            </a>
-                            {% endif %}
-                            <a
-                                href="{{ application.url }}"
-                                target="_blank"
-                                class="btn btn-sm btn-light shadow-sm"
-                                role="link"
-                            >
-                                <i class="fa fa-external-link-alt"></i>
-                            </a>
+                            <div class="btn-group" role="group" aria-label="Third group">
+                                {% if application.reason %}
+                                <a
+                                        tabindex="0"
+                                        class="btn btn-sm btn-danger btn-transparent"
+                                        role="link"
+                                        data-toggle="popover"
+                                        data-trigger="focus"
+                                        title="Reason"
+                                        data-content="{{ application.reason }}"
+                                >
+                                    <i class="far fa-question-circle"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                            <div class="btn-group" role="group" aria-label="Third group">
+                                <a
+                                        class="btn btn-sm btn-warning {{ application.positions|length ? '': 'd-none' }}"
+                                        role="button"
+                                        tabindex="-1"
+                                        href="position/{{ application.id }}"
+                                        target="_blank"
+                                        aria-disabled="{{ application.positions|length ? 'false': 'true' }}"
+                                >
+                                    <i class="fas fa-chart-line"></i>
+                                </a>
+                            </div>
+                            <div class="btn-group" role="group" aria-label="Third group">
+                                <a
+                                        href="{{ application.url }}"
+                                        target="_blank"
+                                        class="btn btn-sm btn-dark"
+                                        role="button"
+                                >
+                                    <i class="fa fa-external-link-alt"></i>
+                                </a>
+                            </div>
                         </div>
                     </td>
-                    </tr>
+                </tr>
                 {% endfor %}
                 </tbody>
             </table>
+            <script>
+                $(function () {
+                    const publisher_id = '{{ publisher.id }}'
+                    const table_selector = $('#appsTable-' + publisher_id)
+                    console.log(publisher_id)
+                    console.log(table_selector)
+                    if (! $.fn.dataTable.isDataTable(table_selector) ) {
+                        table_selector.DataTable({
+                            processing: false,
+                            retrieve: false,
+                            select: true,
+                            paging: true,
+                            pagingType: 'numbers',
+                            searching: true,
+                            ordering: true,
+                            info: true,
+                            order: [
+                                [ 1, 'desc' ]
+                            ],
+                            stateSave: false,
+                            columnDefs: []
+                        });
+                    }
+                });
+            </script>
         </div>
     </div>
-    <script>
-        const publisher_id = '{{ publisher.id }}'
-        $(function () {
-            const publisher_id = '{{ publisher.id }}'
-            const table_selector = $('#appsTable-' + publisher_id)
-            console.log(publisher_id)
-            console.log(table_selector)
-            console.log()
-
-            table_selector.DataTable({
-                retrieve: true,
-                paging:   true,
-                ordering: true,
-                info: true,
-                order: [[ 1, 'desc' ]]
-            })
-        });
-    </script>
 </div>
+{% endblock %}
