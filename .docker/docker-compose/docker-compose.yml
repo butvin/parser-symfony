@@ -1,0 +1,99 @@
+version: "3"
+
+services:
+
+  nginx:
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    build:
+      context: .
+      args:
+        env: dev
+      dockerfile: ./nginx/Dockerfile
+    working_dir: /application
+    volumes_from:
+      - php_fpm
+    restart: always
+    networks:
+      - io42net
+
+  php_fpm:
+    container_name: php-fpm
+    build:
+      context: ./php-fpm
+      dockerfile: Dockerfile
+      args:
+        env: dev
+    volumes:
+      - ~/.composer/docker-cache/:/root/.composer:cached
+      - ../../:/application
+    working_dir: /application
+    environment:
+      - DATABASE_TIMEZONE=UTC
+      - PHP_IDE_CONFIG="serverName=PHPSTORM"
+    networks:
+      - io42net
+
+#  proxy_scraper:
+#    build: proxy-scraper
+#    container_name: proxy-scraper
+#    working_dir: /application
+#    command: python /proxy-scraper/main.py
+#    environment:
+#      - SAVE_PATH=/application/proxies.txt
+#    volumes_from:
+#      - php_fpm
+#    networks:
+#      - io42net
+
+  async_main_consumer:
+    container_name: async_main_consumer
+    build: cli
+    working_dir: /application
+    volumes:
+      - ../..:/application
+      - /var/log/application:/application/var/log
+    command: php -d memory_limit=4000M bin/console messenger:consume async_main_transport --limit=12 -vvv
+    restart: always
+    networks:
+      - io42net
+
+  database:
+    image: mariadb:10.4
+    container_name: database
+    working_dir: /application
+    volumes:
+      - ../.db:/var/lib/mysql
+    env_file:
+      - ../../.env
+    ports:
+      - "3315:3306"
+    networks:
+      - io42net
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    env_file:
+      - ../../.env
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - ./var/rabbitmq:/var/lib/rabbitmq
+    networks:
+      - io42net
+
+  redis:
+    image: bitnami/redis
+    container_name: redis
+    env_file:
+      - ../../.env
+    networks:
+      - io42net
+
+networks:
+  io42net:
+    driver: bridge
