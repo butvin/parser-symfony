@@ -4,8 +4,10 @@ __pycache__/
 
 .DS_Store
 .idea
+.vscode
+
 proxies.txt
-/.infrastructure/.db
+/.docker/.db
 
 ###> symfony/framework-bundle ###
 /.env.local
